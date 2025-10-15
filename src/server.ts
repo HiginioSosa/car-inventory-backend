@@ -2,10 +2,12 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
+import path from 'path';
 import { connectDB } from './config/database';
 import { config } from './config/env';
 import { morganConfig, logger } from './utils/logger';
 import { swaggerServe, swaggerSetup } from './config/swagger';
+import routes from './routes';
 
 // Inicializar Express
 const app: Application = express();
@@ -34,6 +36,12 @@ app.use(morganConfig);
 
 // Swagger Documentation
 app.use('/api-docs', swaggerServe, swaggerSetup);
+
+// Servir archivos estáticos (uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Montar rutas de la API
+app.use('/api', routes);
 
 /**
  * @swagger
@@ -64,6 +72,7 @@ app.get('/', (_req: Request, res: Response) => {
     endpoints: {
       health: '/health',
       docs: '/api-docs',
+      api: '/api',
     },
   });
 });
@@ -95,6 +104,7 @@ if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     logger.success(`Server running on http://${config.HOST}:${PORT}`);
     logger.info(`Environment: ${config.NODE_ENV}`);
+    logger.info(`API Documentation: http://${config.HOST}:${PORT}/api-docs`);
     logger.info(`Press CTRL+C to stop`);
   });
 }
