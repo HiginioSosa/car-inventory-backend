@@ -1,0 +1,49 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# TSOA generated files
+src/generated/
+
+# Entorno
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Uploads
+src/uploads/*
+!src/uploads/.gitkeep
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporal
+temp/
+tmp/
