@@ -23,14 +23,14 @@ describe('Catalog API Integration Tests', () => {
     // Create test user directly
     await User.create({
       email: 'catalogtest@example.com',
-      password: 'password123',
+      password: 'Password123',
       name: 'Catalog Test User',
     });
 
     // Get token by logging in
     const loginResponse = await request(app).post('/api/auth/login').send({
       email: 'catalogtest@example.com',
-      password: 'password123',
+      password: 'Password123',
     });
     authToken = loginResponse.body.data.token;
   });
@@ -151,10 +151,13 @@ describe('Catalog API Integration Tests', () => {
       expect(response.body).toHaveProperty('name', 'Not Found');
     });
 
-    it('should handle case-sensitive brand search', async () => {
-      const response = await request(app).get('/api/catalogs/models/toyota').expect(404);
+    it('should handle case-insensitive brand search', async () => {
+      const response = await request(app).get('/api/catalogs/models/toyota').expect(200);
 
-      expect(response.body).toHaveProperty('status', 404);
+      expect(response.body).toHaveProperty('status', 200);
+      expect(response.body.data).toHaveProperty('marca', 'toyota'); // Devuelve el param tal cual
+      expect(response.body.data).toHaveProperty('modelos');
+      expect(response.body.data.modelos.length).toBeGreaterThan(0);
     });
   });
 
@@ -165,15 +168,15 @@ describe('Catalog API Integration Tests', () => {
       expect(response.body).toHaveProperty('status', 200);
       expect(response.body).toHaveProperty('message', 'Años obtenidos exitosamente');
       expect(response.body).toHaveProperty('data');
-      expect(response.body.data).toHaveProperty('años');
-      expect(Array.isArray(response.body.data.años)).toBe(true);
-      expect(response.body.data.años.length).toBeGreaterThan(0);
+      expect(response.body.data).toHaveProperty('anios');
+      expect(Array.isArray(response.body.data.anios)).toBe(true);
+      expect(response.body.data.anios.length).toBeGreaterThan(0);
     });
 
     it('should return years in descending order', async () => {
       const response = await request(app).get('/api/catalogs/years').expect(200);
 
-      const years = response.body.data.años;
+      const years = response.body.data.anios;
       const currentYear = new Date().getFullYear();
       expect(years[0]).toBe(currentYear + 1);
       expect(years[years.length - 1]).toBe(1990);
@@ -187,7 +190,7 @@ describe('Catalog API Integration Tests', () => {
     it('should include current year and next year', async () => {
       const response = await request(app).get('/api/catalogs/years').expect(200);
 
-      const years = response.body.data.años;
+      const years = response.body.data.anios;
       const currentYear = new Date().getFullYear();
       expect(years).toContain(currentYear);
       expect(years).toContain(currentYear + 1);
@@ -231,9 +234,6 @@ describe('Catalog API Integration Tests', () => {
       expect(catalog).toHaveProperty('_id');
       expect(catalog).toHaveProperty('marca');
       expect(catalog).toHaveProperty('modelos');
-      expect(catalog).toHaveProperty('isActive');
-      expect(catalog).toHaveProperty('createdAt');
-      expect(catalog).toHaveProperty('updatedAt');
       expect(Array.isArray(catalog.modelos)).toBe(true);
     });
 

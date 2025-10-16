@@ -46,7 +46,7 @@ export const successResponse = <T = unknown>(
   const response: SuccessResponse<T> = {
     status: statusCode,
     message,
-    ...(data && { data }),
+    ...(data !== undefined && { data }),
   };
   return res.status(statusCode).json(response);
 };

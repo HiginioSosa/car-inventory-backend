@@ -19,6 +19,8 @@ describe('Response Handler Unit Tests', () => {
       status: statusMock,
       json: jsonMock,
     };
+    // Make jsonMock return the mockResponse to enable chaining
+    jsonMock.mockReturnValue(mockResponse);
   });
 
   describe('successResponse', () => {

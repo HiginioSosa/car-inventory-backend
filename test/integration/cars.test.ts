@@ -16,7 +16,7 @@ import { config } from '../../src/config/env';
 interface CarResponse {
   marca: string;
   modelo: string;
-  año: number;
+  anio: number;
   precio: number;
   [key: string]: unknown;
 }
@@ -36,7 +36,7 @@ describe('Cars API Integration Tests', () => {
     // Create test user directly
     const user = await User.create({
       email: 'cartest@example.com',
-      password: 'password123',
+      password: 'Password123',
       name: 'Car Test User',
     });
     _testUserId = (user._id as mongoose.Types.ObjectId).toString();
@@ -44,7 +44,7 @@ describe('Cars API Integration Tests', () => {
     // Get token by logging in
     const loginResponse = await request(app).post('/api/auth/login').send({
       email: 'cartest@example.com',
-      password: 'password123',
+      password: 'Password123',
     });
     authToken = loginResponse.body.data.token;
   });
@@ -67,7 +67,7 @@ describe('Cars API Integration Tests', () => {
         {
           marca: 'Toyota',
           modelo: 'Corolla',
-          año: 2020,
+          anio: 2020,
           precio: 250000,
           kilometraje: 15000,
           color: 'Rojo',
@@ -77,7 +77,7 @@ describe('Cars API Integration Tests', () => {
         {
           marca: 'Honda',
           modelo: 'Civic',
-          año: 2021,
+          anio: 2021,
           precio: 300000,
           kilometraje: 8000,
           color: 'Azul',
@@ -87,7 +87,7 @@ describe('Cars API Integration Tests', () => {
         {
           marca: 'Toyota',
           modelo: 'Camry',
-          año: 2019,
+          anio: 2019,
           precio: 280000,
           kilometraje: 25000,
           color: 'Negro',
@@ -134,14 +134,14 @@ describe('Cars API Integration Tests', () => {
       expect(response.body.data.data[0].modelo).toBe('Civic');
     });
 
-    it('should filter cars by año', async () => {
+    it('should filter cars by anio', async () => {
       const response = await request(app)
-        .get('/api/cars?año=2020')
+        .get('/api/cars?anio=2020')
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
       expect(response.body.data.data.length).toBe(1);
-      expect(response.body.data.data[0].año).toBe(2020);
+      expect(response.body.data.data[0].anio).toBe(2020);
     });
 
     it('should filter cars by price range', async () => {
@@ -192,7 +192,7 @@ describe('Cars API Integration Tests', () => {
       const car = await Car.create({
         marca: 'Toyota',
         modelo: 'Corolla',
-        año: 2020,
+        anio: 2020,
         precio: 250000,
         kilometraje: 15000,
         email: 'test@example.com',
@@ -245,7 +245,7 @@ describe('Cars API Integration Tests', () => {
     const validCarData = {
       marca: 'Nissan',
       modelo: 'Sentra',
-      año: 2022,
+      anio: 2022,
       precio: 320000,
       kilometraje: 5000,
       color: 'Blanco',
@@ -259,7 +259,7 @@ describe('Cars API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .field('marca', validCarData.marca)
         .field('modelo', validCarData.modelo)
-        .field('año', validCarData.año)
+        .field('anio', validCarData.anio)
         .field('precio', validCarData.precio)
         .field('kilometraje', validCarData.kilometraje)
         .field('color', validCarData.color)
@@ -287,7 +287,7 @@ describe('Cars API Integration Tests', () => {
           .set('Authorization', `Bearer ${authToken}`)
           .field('marca', validCarData.marca)
           .field('modelo', validCarData.modelo)
-          .field('año', validCarData.año)
+          .field('anio', validCarData.anio)
           .field('precio', validCarData.precio)
           .field('kilometraje', validCarData.kilometraje)
           .field('color', validCarData.color)
@@ -312,7 +312,7 @@ describe('Cars API Integration Tests', () => {
         .post('/api/cars')
         .set('Authorization', `Bearer ${authToken}`)
         .field('modelo', validCarData.modelo)
-        .field('año', validCarData.año)
+        .field('anio', validCarData.anio)
         .field('precio', validCarData.precio)
         .field('kilometraje', validCarData.kilometraje)
         .field('email', validCarData.email)
@@ -320,7 +320,8 @@ describe('Cars API Integration Tests', () => {
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
+      expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('marca');
     });
 
     it('should fail with invalid año (year too old)', async () => {
@@ -345,7 +346,7 @@ describe('Cars API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .field('marca', validCarData.marca)
         .field('modelo', validCarData.modelo)
-        .field('año', validCarData.año)
+        .field('anio', validCarData.anio)
         .field('precio', -1000)
         .field('kilometraje', validCarData.kilometraje)
         .field('email', validCarData.email)
@@ -361,7 +362,7 @@ describe('Cars API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .field('marca', validCarData.marca)
         .field('modelo', validCarData.modelo)
-        .field('año', validCarData.año)
+        .field('anio', validCarData.anio)
         .field('precio', validCarData.precio)
         .field('kilometraje', validCarData.kilometraje)
         .field('email', 'invalid-email')
@@ -377,7 +378,7 @@ describe('Cars API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .field('marca', validCarData.marca)
         .field('modelo', validCarData.modelo)
-        .field('año', validCarData.año)
+        .field('anio', validCarData.anio)
         .field('precio', validCarData.precio)
         .field('kilometraje', validCarData.kilometraje)
         .field('email', validCarData.email)
@@ -392,7 +393,7 @@ describe('Cars API Integration Tests', () => {
         .post('/api/cars')
         .field('marca', validCarData.marca)
         .field('modelo', validCarData.modelo)
-        .field('año', validCarData.año)
+        .field('anio', validCarData.anio)
         .field('precio', validCarData.precio)
         .field('kilometraje', validCarData.kilometraje)
         .field('email', validCarData.email)
@@ -408,7 +409,7 @@ describe('Cars API Integration Tests', () => {
       const car = await Car.create({
         marca: 'Toyota',
         modelo: 'Corolla',
-        año: 2020,
+        anio: 2020,
         precio: 250000,
         kilometraje: 15000,
         email: 'test@example.com',
@@ -468,7 +469,7 @@ describe('Cars API Integration Tests', () => {
       const car = await Car.create({
         marca: 'Toyota',
         modelo: 'Corolla',
-        año: 2020,
+        anio: 2020,
         precio: 250000,
         kilometraje: 15000,
         email: 'test@example.com',
@@ -519,7 +520,7 @@ describe('Cars API Integration Tests', () => {
         {
           marca: 'Toyota',
           modelo: 'Corolla',
-          año: 2020,
+          anio: 2020,
           precio: 250000,
           kilometraje: 15000,
           email: 'test1@example.com',
@@ -528,7 +529,7 @@ describe('Cars API Integration Tests', () => {
         {
           marca: 'Honda',
           modelo: 'Civic',
-          año: 2021,
+          anio: 2021,
           precio: 300000,
           kilometraje: 8000,
           email: 'test2@example.com',
@@ -582,7 +583,7 @@ describe('Cars API Integration Tests', () => {
         {
           marca: 'Toyota',
           modelo: 'Corolla',
-          año: 2020,
+          anio: 2020,
           precio: 250000,
           kilometraje: 15000,
           email: 'test1@example.com',
@@ -591,7 +592,7 @@ describe('Cars API Integration Tests', () => {
         {
           marca: 'Honda',
           modelo: 'Civic',
-          año: 2021,
+          anio: 2021,
           precio: 300000,
           kilometraje: 8000,
           email: 'test2@example.com',

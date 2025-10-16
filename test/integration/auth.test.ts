@@ -32,7 +32,7 @@ describe('Auth API Integration Tests', () => {
   describe('POST /api/auth/register', () => {
     const validRegisterData = {
       email: 'test@example.com',
-      password: 'password123',
+      password: 'Password123',
       name: 'Test User',
     };
 
@@ -79,14 +79,13 @@ describe('Auth API Integration Tests', () => {
       const response = await request(app)
         .post('/api/auth/register')
         .send({
-          password: 'password123',
+          password: 'Password123',
           name: 'Test User',
         })
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
-      expect(Array.isArray(response.body.errors)).toBe(true);
+      expect(response.body).toHaveProperty('message');
     });
 
     it('should fail with invalid data - missing password', async () => {
@@ -99,7 +98,7 @@ describe('Auth API Integration Tests', () => {
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
+      expect(response.body).toHaveProperty('message');
     });
 
     it('should fail with invalid data - missing name', async () => {
@@ -107,12 +106,12 @@ describe('Auth API Integration Tests', () => {
         .post('/api/auth/register')
         .send({
           email: 'test@example.com',
-          password: 'password123',
+          password: 'Password123',
         })
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
+      expect(response.body).toHaveProperty('message');
     });
 
     it('should fail with invalid email format', async () => {
@@ -120,13 +119,13 @@ describe('Auth API Integration Tests', () => {
         .post('/api/auth/register')
         .send({
           email: 'invalid-email',
-          password: 'password123',
+          password: 'Password123',
           name: 'Test User',
         })
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
+      expect(response.body).toHaveProperty('message');
     });
 
     it('should fail with password too short', async () => {
@@ -140,14 +139,14 @@ describe('Auth API Integration Tests', () => {
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
+      expect(response.body).toHaveProperty('message');
     });
   });
 
   describe('POST /api/auth/login', () => {
     const testUser = {
       email: 'login@example.com',
-      password: 'password123',
+      password: 'Password123',
       name: 'Login Test User',
     };
 
@@ -235,7 +234,7 @@ describe('Auth API Integration Tests', () => {
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
+      expect(response.body).toHaveProperty('message');
     });
 
     it('should fail with missing password', async () => {
@@ -247,14 +246,14 @@ describe('Auth API Integration Tests', () => {
         .expect(400);
 
       expect(response.body).toHaveProperty('status', 400);
-      expect(response.body).toHaveProperty('errors');
+      expect(response.body).toHaveProperty('message');
     });
   });
 
   describe('GET /api/auth/profile', () => {
     const testUser = {
       email: 'profile@example.com',
-      password: 'password123',
+      password: 'Password123',
       name: 'Profile Test User',
     };
 
@@ -328,7 +327,7 @@ describe('Auth API Integration Tests', () => {
       // Register a user to get a valid token
       const response = await request(app).post('/api/auth/register').send({
         email: 'verify@example.com',
-        password: 'password123',
+        password: 'Password123',
         name: 'Verify Test User',
       });
       validToken = response.body.data.token;

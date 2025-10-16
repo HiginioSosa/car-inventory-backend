@@ -196,6 +196,12 @@ Registrar un nuevo usuario.
 
 **Rate Limit:** 5 requests / 15 minutos
 
+**Requisitos de Contraseña:**
+- Mínimo 6 caracteres
+- Al menos una letra mayúscula
+- Al menos una letra minúscula
+- Al menos un número
+
 **Request:**
 
 ```json
@@ -309,13 +315,13 @@ Listar autos con filtros y paginación.
 |-----------|------|-----------|-------------|
 | marca | string | No | Filtrar por marca |
 | modelo | string | No | Filtrar por modelo |
-| año | number | No | Filtrar por año exacto |
+| anio | number | No | Filtrar por año exacto |
 | minPrecio | number | No | Precio mínimo |
 | maxPrecio | number | No | Precio máximo |
 | color | string | No | Filtrar por color |
 | page | number | No | Número de página (default: 1) |
 | limit | number | No | Items por página (default: 10, max: 100) |
-| sortBy | string | No | Campo de ordenamiento (precio, año, kilometraje, fechaAlta) |
+| sortBy | string | No | Campo de ordenamiento (precio, anio, kilometraje, fechaAlta) |
 | sortOrder | string | No | Orden (asc, desc) (default: desc) |
 
 **Ejemplo Request:**
@@ -336,7 +342,7 @@ GET /api/cars?marca=Ford&minPrecio=100000&maxPrecio=500000&page=1&limit=10
         "_id": "507f1f77bcf86cd799439011",
         "marca": "Ford",
         "modelo": "Focus",
-        "año": 2020,
+        "anio": 2020,
         "precio": 280000,
         "kilometraje": 20000,
         "color": "Negro",
@@ -377,7 +383,7 @@ Obtener un auto por ID.
     "_id": "507f1f77bcf86cd799439011",
     "marca": "Ford",
     "modelo": "Focus",
-    "año": 2020,
+    "anio": 2020,
     "precio": 280000,
     "kilometraje": 20000,
     "color": "Negro",
@@ -411,7 +417,7 @@ Crear un nuevo auto.
 |-------|------|-----------|-------------|
 | marca | string | Sí | Marca del auto |
 | modelo | string | Sí | Modelo del auto |
-| año | number | Sí | Año (1900 - año actual + 1) |
+| anio | number | Sí | Año (1900 - año actual + 1) |
 | precio | number | Sí | Precio entero positivo |
 | kilometraje | number | Sí | Kilometraje > 100 |
 | color | string | No | Color del auto |
@@ -425,7 +431,7 @@ Crear un nuevo auto.
 const formData = new FormData();
 formData.append('marca', 'Honda');
 formData.append('modelo', 'Civic');
-formData.append('año', '2021');
+formData.append('anio', '2021');
 formData.append('precio', '350000');
 formData.append('kilometraje', '15000');
 formData.append('color', 'Rojo');
@@ -454,7 +460,7 @@ fetch('http://localhost:3000/api/cars', {
     "_id": "507f1f77bcf86cd799439011",
     "marca": "Honda",
     "modelo": "Civic",
-    "año": 2021,
+    "anio": 2021,
     "precio": 350000,
     "kilometraje": 15000,
     "color": "Rojo",
@@ -466,6 +472,10 @@ fetch('http://localhost:3000/api/cars', {
   }
 }
 ```
+
+**Notas Importantes:**
+- Si ocurre un error de validación después de subir una foto, la imagen se elimina automáticamente del servidor
+- Si la creación del auto falla por cualquier motivo, la imagen también se limpia automáticamente
 
 **Errores:**
 - `400`: Datos de validación inválidos o archivo no válido
@@ -480,6 +490,8 @@ Actualizar un auto existente.
 **Auth:** Requerida
 **Rate Limit:** 10 uploads / 10 minutos (si incluye foto)
 **Content-Type:** `multipart/form-data`
+
+**Nota:** Si se proporciona una nueva foto, la foto anterior se eliminará automáticamente del servidor.
 
 **Form Data:** Todos los campos son opcionales
 
@@ -506,6 +518,8 @@ Actualizar un auto existente.
 Eliminar un auto (soft delete).
 
 **Auth:** Requerida
+
+**Nota:** Este endpoint realiza un soft delete (marca el auto como eliminado sin borrarlo de la base de datos) y elimina la foto asociada del servidor si existe.
 
 **Response (200):**
 
@@ -634,7 +648,7 @@ Obtener lista de años disponibles.
   "status": 200,
   "message": "Años obtenidos exitosamente",
   "data": {
-    "años": [2026, 2025, 2024, 2023, ..., 1991, 1990]
+    "anios": [2026, 2025, 2024, 2023, ..., 1991, 1990]
   }
 }
 ```
@@ -722,6 +736,7 @@ Todos los endpoints que retornan listas soportan paginación mediante query para
 - **Tipos permitidos:** JPG, JPEG, PNG, WebP
 - **Tamaño máximo:** 5 MB
 - **Rate Limit:** 10 uploads / 10 minutos
+- **Nombres de archivo:** Se generan aleatoriamente con timestamp para seguridad
 
 ### Validaciones de Seguridad
 
@@ -729,6 +744,15 @@ Todos los endpoints que retornan listas soportan paginación mediante query para
 2. Sanitización de nombres de archivo
 3. Protección contra path traversal
 4. Límite de tamaño de archivo
+5. Limpieza automática de imágenes en caso de errores
+
+### Limpieza Automática de Imágenes
+
+El sistema elimina automáticamente las imágenes en los siguientes casos:
+- Errores de validación después de subir la foto
+- Fallos en la creación o actualización del auto
+- Actualización de un auto con una nueva foto (elimina la anterior)
+- Eliminación de un auto (soft delete)
 
 ### URL de Archivos
 

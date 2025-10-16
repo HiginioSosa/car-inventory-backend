@@ -295,7 +295,7 @@
                   "disabled": true
                 },
                 {
-                  "key": "año",
+                  "key": "anio",
                   "value": "2020",
                   "disabled": true
                 },
@@ -387,7 +387,7 @@
                   "type": "text"
                 },
                 {
-                  "key": "año",
+                  "key": "anio",
                   "value": "2020",
                   "type": "text"
                 },
@@ -465,7 +465,7 @@
                   "type": "text"
                 },
                 {
-                  "key": "año",
+                  "key": "anio",
                   "value": "2021",
                   "type": "text"
                 },
@@ -672,7 +672,7 @@
                   "type": "text"
                 },
                 {
-                  "key": "año",
+                  "key": "anio",
                   "value": "2020",
                   "type": "text"
                 },

@@ -7,6 +7,10 @@
 import rateLimit from 'express-rate-limit';
 import { errorResponse } from '../utils/responseHandler';
 import { Response, Request } from 'express';
+import { config } from '../config/env';
+
+// Desactivar rate limiting en ambiente de test
+const isTestEnv = config.NODE_ENV === 'test';
 
 /**
  * Rate limiter general para toda la API
@@ -14,7 +18,7 @@ import { Response, Request } from 'express';
  */
 export const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // Límite de 100 requests por ventana
+  max: isTestEnv ? 10000 : 100, // Sin límite en test
   message: 'Demasiadas solicitudes desde esta IP, por favor intente más tarde',
   standardHeaders: true, // Retorna rate limit info en `RateLimit-*` headers
   legacyHeaders: false, // Deshabilita `X-RateLimit-*` headers
@@ -35,7 +39,7 @@ export const generalLimiter = rateLimit({
  */
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // Límite de 5 requests por ventana
+  max: isTestEnv ? 10000 : 5, // Sin límite en test
   skipSuccessfulRequests: true, // No contar requests exitosos
   message: 'Demasiados intentos de inicio de sesión, por favor intente más tarde',
   standardHeaders: true,
@@ -57,7 +61,7 @@ export const authLimiter = rateLimit({
  */
 export const createLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutos
-  max: 20, // Límite de 20 requests por ventana
+  max: isTestEnv ? 10000 : 20, // Sin límite en test
   message: 'Demasiadas solicitudes de creación, por favor intente más tarde',
   standardHeaders: true,
   legacyHeaders: false,
@@ -78,7 +82,7 @@ export const createLimiter = rateLimit({
  */
 export const uploadLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutos
-  max: 10, // Límite de 10 uploads por ventana
+  max: isTestEnv ? 10000 : 10, // Sin límite en test
   message: 'Demasiadas cargas de archivos, por favor intente más tarde',
   standardHeaders: true,
   legacyHeaders: false,
