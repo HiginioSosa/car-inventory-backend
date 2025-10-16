@@ -52,6 +52,9 @@ npm install
 cp .env.example .env
 # Editar .env con tus configuraciones
 
+# Poblar base de datos con datos iniciales
+npm run seed
+
 # Ejecutar en modo desarrollo
 npm run dev
 \`\`\`
@@ -106,7 +109,41 @@ npm run typecheck    # Verificar tipos de TypeScript
 ### Utilidades
 \`\`\`bash
 npm run clean        # Limpiar carpeta dist
+npm run seed         # Poblar base de datos con datos iniciales
 \`\`\`
+
+## 🌱 Inicialización de Base de Datos
+
+### Script Seed (Desarrollo)
+
+Ejecuta el script seed para crear usuarios de prueba y catálogos iniciales:
+
+\`\`\`bash
+npm run seed
+\`\`\`
+
+**Crea:**
+- 👤 Usuario Admin: \`admin@carinventory.com\` / \`Admin123\`
+- 👤 Usuario Test: \`user@carinventory.com\` / \`User123\`
+- 📋 Catálogos de marcas y modelos
+
+**Cuándo usar:**
+- Primera instalación del proyecto
+- Después de resetear la base de datos
+- Para testing local
+
+### Endpoint Initialize (Producción)
+
+Alternativamente, inicializa solo los catálogos vía API:
+
+\`\`\`bash
+POST /api/catalogs/initialize
+Authorization: Bearer <tu-token>
+\`\`\`
+
+**Diferencias:**
+- 🔧 **Seed Script**: Ejecuta desde terminal, crea usuarios + catálogos
+- 🔌 **API Endpoint**: Ejecuta vía HTTP, solo catálogos, requiere autenticación
 
 ## 🌐 Endpoints
 

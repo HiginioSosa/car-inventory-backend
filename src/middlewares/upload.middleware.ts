@@ -27,15 +27,15 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (_req: Request, file: Express.Multer.File, cb) => {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    // Generar nombre completamente aleatorio usando UUID-like pattern
+    const timestamp = Date.now().toString(36);
+    const randomStr = Math.random().toString(36).substring(2, 15);
+    const randomStr2 = Math.random().toString(36).substring(2, 15);
     const ext = path.extname(file.originalname).toLowerCase();
-    // Sanitizar nombre del archivo: eliminar caracteres especiales y espacios
-    const name = path
-      .basename(file.originalname, ext)
-      .replace(/[^a-zA-Z0-9]/g, '-')
-      .replace(/-+/g, '-')
-      .substring(0, 50); // Limitar longitud
-    cb(null, `${name}-${uniqueSuffix}${ext}`);
+
+    // Formato: timestamp-random1-random2.ext
+    const uniqueName = `${timestamp}-${randomStr}-${randomStr2}${ext}`;
+    cb(null, uniqueName);
   },
 });
 
@@ -102,14 +102,18 @@ export const deleteFile = async (filePath: string): Promise<void> => {
     // Verificar que el path resultante esté dentro del directorio de uploads
     const normalizedPath = path.normalize(fullPath);
     if (!normalizedPath.startsWith(uploadsDir)) {
+      console.error(`❌ Path inválido intentado: ${filePath}`);
       throw new Error('Invalid file path');
     }
 
     if (fs.existsSync(fullPath)) {
       fs.unlinkSync(fullPath);
+      console.log(`✅ Archivo eliminado exitosamente: ${safeFilename}`);
+    } else {
+      console.warn(`⚠️  Archivo no encontrado para eliminar: ${safeFilename}`);
     }
   } catch (error) {
-    console.error('Error deleting file:', error);
+    console.error(`❌ Error al eliminar archivo ${filePath}:`, error);
     throw error;
   }
 };

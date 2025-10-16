@@ -9,6 +9,7 @@ import carController from '../controllers/car.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 import { uploadSingle } from '../middlewares/upload.middleware';
 import { validate } from '../middlewares/validation.middleware';
+import { parseCarBody } from '../middlewares/parseBody.middleware';
 import {
   createCarValidations,
   updateCarValidations,
@@ -177,6 +178,7 @@ router.post(
   createLimiter,
   uploadLimiter,
   uploadSingle,
+  parseCarBody,
   validate(createCarValidations),
   carController.createCar
 );
@@ -232,6 +234,7 @@ router.put(
   authenticate,
   uploadLimiter,
   uploadSingle,
+  parseCarBody,
   validate(updateCarValidations),
   carController.updateCar
 );

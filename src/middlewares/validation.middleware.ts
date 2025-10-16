@@ -7,6 +7,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult, ValidationChain } from 'express-validator';
 import { errorResponse } from '../utils/responseHandler';
+import { deleteFile } from './upload.middleware';
 
 /**
  * Middleware para validar requests
@@ -25,6 +26,16 @@ export const validate = (validations: ValidationChain[]) => {
 
     if (errors.isEmpty()) {
       return next();
+    }
+
+    // Si hay errores y se subió un archivo, eliminarlo
+    if (req.file) {
+      try {
+        await deleteFile(req.file.filename);
+        console.log(`🗑️  Imagen eliminada por validación fallida: ${req.file.filename}`);
+      } catch (error) {
+        console.error('Error al eliminar imagen tras validación fallida:', error);
+      }
     }
 
     // Formatear errores

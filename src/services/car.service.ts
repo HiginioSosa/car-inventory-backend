@@ -147,8 +147,9 @@ class CarService {
     if (data.foto && car.foto && data.foto !== car.foto) {
       try {
         await deleteFile(car.foto);
+        console.log(`🗑️  Foto anterior eliminada al actualizar: ${car.foto}`);
       } catch (error) {
-        console.error('Error deleting old photo:', error);
+        console.error('Error al eliminar foto anterior:', error);
       }
     }
 
@@ -172,6 +173,16 @@ class CarService {
 
     if (!car) {
       throw new Error('Auto no encontrado');
+    }
+
+    // Eliminar foto si existe
+    if (car.foto) {
+      try {
+        await deleteFile(car.foto);
+        console.log(`🗑️  Foto eliminada del auto: ${car.foto}`);
+      } catch (error) {
+        console.error('Error al eliminar foto del auto:', error);
+      }
     }
 
     // Soft delete
@@ -201,8 +212,9 @@ class CarService {
     if (car.foto) {
       try {
         await deleteFile(car.foto);
+        console.log(`🗑️  Foto eliminada en hard delete: ${car.foto}`);
       } catch (error) {
-        console.error('Error deleting photo:', error);
+        console.error('Error al eliminar foto en hard delete:', error);
       }
     }
 

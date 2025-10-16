@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 import carService from '../services/car.service';
 import { successResponse, errorResponse } from '../utils/responseHandler';
 import { CreateCarDTO, UpdateCarDTO, CarFilters, AuthRequest, CarResponse } from '../types';
-import { getFileUrl } from '../middlewares/upload.middleware';
+import { getFileUrl, deleteFile } from '../middlewares/upload.middleware';
 import { ICar } from '../models/Car';
 
 /**
@@ -142,6 +142,16 @@ class CarController {
         ...carWithUrl,
       });
     } catch (error) {
+      // Si hay un error y se subió una foto, eliminarla
+      if (req.file) {
+        try {
+          await deleteFile(req.file.filename);
+          console.log(`🗑️  Imagen eliminada por error en creación: ${req.file.filename}`);
+        } catch (deleteError) {
+          console.error('Error al eliminar imagen tras fallo en creación:', deleteError);
+        }
+      }
+
       if (error instanceof Error) {
         return errorResponse(res, 400, 'Bad Request', error.message, 'Error al crear auto');
       }
@@ -176,6 +186,15 @@ class CarController {
       const car = await carService.updateCar(id, data);
 
       if (!car) {
+        // Si no se encuentra el auto y hay una nueva foto, eliminarla
+        if (req.file) {
+          try {
+            await deleteFile(req.file.filename);
+            console.log(`🗑️  Imagen eliminada porque el auto no existe: ${req.file.filename}`);
+          } catch (deleteError) {
+            console.error('Error al eliminar imagen:', deleteError);
+          }
+        }
         return errorResponse(res, 404, 'Not Found', 'Car not found', 'Auto no encontrado');
       }
 
@@ -187,6 +206,16 @@ class CarController {
 
       return successResponse(res, 200, 'Auto actualizado exitosamente', carWithUrl);
     } catch (error) {
+      // Si hay un error y se subió una nueva foto, eliminarla
+      if (req.file) {
+        try {
+          await deleteFile(req.file.filename);
+          console.log(`🗑️  Imagen eliminada por error en actualización: ${req.file.filename}`);
+        } catch (deleteError) {
+          console.error('Error al eliminar imagen tras fallo en actualización:', deleteError);
+        }
+      }
+
       if (error instanceof Error && error.message === 'Auto no encontrado') {
         return errorResponse(res, 404, 'Not Found', error.message, error.message);
       }
