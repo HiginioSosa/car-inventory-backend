@@ -373,37 +373,11 @@ docker run -d \\
   car-inventory-api:latest
 ```
 
-### Plataformas Recomendadas
-
-- **Railway:** Deploy automático con GitHub
-- **Render:** Free tier con MongoDB
-- **Heroku:** Con MongoDB Atlas
-- **AWS ECS:** Con Docker
-- **DigitalOcean App Platform:** Deploy directo
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea tu rama de feature (\`git checkout -b feature/AmazingFeature\`)
-3. Commit tus cambios (\`git commit -m 'Add some AmazingFeature'\`)
-4. Push a la rama (\`git push origin feature/AmazingFeature\`)
-5. Abre un Pull Request
-
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia ISC.
+Este proyecto es para una prueba tecnica.
 
 ## 👥 Autor
 
-Tu Nombre - [@tuhandle](https://twitter.com/tuhandle)
-
-## 🙏 Agradecimientos
-
-- Express.js team
-- TypeScript team
-- MongoDB team
-- Comunidad open source
-
----
-
-⭐ Si te gusta este proyecto, dale una estrella en GitHub!
+José Higinio Sosa Vázquez
+- GitHub: [higinio-sosa](https://github.com/higinio-sosa)
