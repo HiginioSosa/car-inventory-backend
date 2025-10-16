@@ -7,14 +7,14 @@
 - 🔒 **Autenticación JWT** - Sistema de autenticación seguro
 - 📝 **TypeScript** - Tipado estático para mayor seguridad
 - 🧪 **Testing** - Jest & Supertest configurados
-- � **Documentación API** - Swagger/OpenAPI integrado
+- 📚 **Documentación API** - Swagger/OpenAPI integrado
 - 🐳 **Docker** - Contenedores para desarrollo y producción
 - 🎨 **Code Quality** - ESLint + Prettier configurados
 - 📊 **MongoDB** - Base de datos NoSQL con Mongoose
 - 🔍 **Logging** - Morgan para requests HTTP
 - 🛡️ **Seguridad** - Helmet, CORS, y mejores prácticas
 
-## �🚀 Tecnologías
+## 🚀 Tecnologías
 
 - **Runtime:** Node.js >= 18.0.0
 - **Framework:** Express.js
@@ -40,7 +40,7 @@
 
 ### Opción 1: Instalación Local
 
-\`\`\`bash
+```bash
 # Clonar el repositorio
 git clone <repository-url>
 cd car-inventory-backend
@@ -57,60 +57,57 @@ npm run seed
 
 # Ejecutar en modo desarrollo
 npm run dev
-\`\`\`
+```
 
 ### Opción 2: Con Docker (Recomendado)
 
-\`\`\`bash
+```bash
 # Solo MongoDB
 docker-compose up -d
-
-# O toda la aplicación (app + MongoDB + Mongo Express)
-docker-compose -f docker-compose.dev.yml up -d
 
 # Ver logs
 docker-compose logs -f
 
 # Detener
 docker-compose down
-\`\`\`
+```
 
 ## 📝 Scripts Disponibles
 
 ### Desarrollo
-\`\`\`bash
+```bash
 npm run dev          # Ejecutar con nodemon (auto-reload)
-\`\`\`
+```
 
 ### Producción
-\`\`\`bash
+```bash
 npm run build        # Compilar TypeScript
 npm start            # Ejecutar aplicación compilada
 npm run start:prod   # Ejecutar en modo producción
-\`\`\`
+```
 
 ### Testing
-\`\`\`bash
+```bash
 npm test             # Ejecutar tests
 npm run test:watch   # Tests en modo watch
 npm run test:coverage # Tests con cobertura
 npm run test:ci      # Tests para CI/CD
-\`\`\`
+```
 
 ### Calidad de Código
-\`\`\`bash
+```bash
 npm run lint         # Verificar código con ESLint
 npm run lint:fix     # Arreglar problemas automáticamente
 npm run format       # Formatear código con Prettier
 npm run format:check # Verificar formato
 npm run typecheck    # Verificar tipos de TypeScript
-\`\`\`
+```
 
 ### Utilidades
-\`\`\`bash
+```bash
 npm run clean        # Limpiar carpeta dist
 npm run seed         # Poblar base de datos con datos iniciales
-\`\`\`
+```
 
 ## 🌱 Inicialización de Base de Datos
 
@@ -118,9 +115,9 @@ npm run seed         # Poblar base de datos con datos iniciales
 
 Ejecuta el script seed para crear usuarios de prueba y catálogos iniciales:
 
-\`\`\`bash
+```bash
 npm run seed
-\`\`\`
+```
 
 **Crea:**
 - 👤 Usuario Admin: \`admin@carinventory.com\` / \`Admin123\`
@@ -136,10 +133,10 @@ npm run seed
 
 Alternativamente, inicializa solo los catálogos vía API:
 
-\`\`\`bash
+```bash
 POST /api/catalogs/initialize
 Authorization: Bearer <tu-token>
-\`\`\`
+```
 
 **Diferencias:**
 - 🔧 **Seed Script**: Ejecuta desde terminal, crea usuarios + catálogos
@@ -168,7 +165,7 @@ Authorization: Bearer <tu-token>
 
 ## 📁 Estructura del Proyecto
 
-\`\`\`
+```
 car-inventory-backend/
 ├── src/
 │   ├── __tests__/           # Tests
@@ -210,13 +207,13 @@ car-inventory-backend/
 ├── package.json             # Dependencias y scripts
 ├── tsconfig.json            # Configuración TypeScript
 └── README.md                # Este archivo
-\`\`\`
+```
 
 ## 🔒 Variables de Entorno
 
 Crea un archivo \`.env\` basado en \`.env.example\`:
 
-\`\`\`env
+```env
 # Entorno
 NODE_ENV=development
 
@@ -241,13 +238,13 @@ CORS_ORIGIN=http://localhost:4200
 
 # Logs
 LOG_LEVEL=debug
-\`\`\`
+```
 
 ## 🐳 Docker
 
 ### MongoDB con Mongo Express
 
-\`\`\`bash
+```bash
 # Iniciar MongoDB y Mongo Express
 docker-compose up -d
 
@@ -255,22 +252,22 @@ docker-compose up -d
 # URL: http://localhost:8081
 # Usuario: admin
 # Password: admin123
-\`\`\`
+```
 
 ### Aplicación Completa con Docker
 
-\`\`\`bash
+```bash
 # Desarrollo (con hot-reload)
 docker-compose -f docker-compose.dev.yml up -d
 
 # Producción (build optimizado)
 docker build -t car-inventory-api .
 docker run -p 3000:3000 --env-file .env.docker car-inventory-api
-\`\`\`
+```
 
 ### Comandos Útiles Docker
 
-\`\`\`bash
+```bash
 # Ver logs
 docker-compose logs -f app
 
@@ -282,13 +279,13 @@ docker-compose build --no-cache
 
 # Limpiar volúmenes
 docker-compose down -v
-\`\`\`
+```
 
 ## 🧪 Testing
 
 ### Ejecutar Tests
 
-\`\`\`bash
+```bash
 # Todos los tests
 npm test
 
@@ -300,15 +297,15 @@ npm run test:watch
 
 # Tests específicos
 npm test -- health.test.ts
-\`\`\`
+```
 
 ### Estructura de Tests
 
 - **Unit Tests:** Tests de funciones y utilidades individuales
 - **Integration Tests:** Tests de endpoints y flujos completos
-- **Coverage:** Reportes en \`coverage/\` carpeta
+- **Coverage:** Reportes en `coverage/` carpeta
 
-## � Documentación
+## 📚 Documentación
 
 ### Swagger/OpenAPI
 
@@ -320,7 +317,7 @@ Accede a la documentación interactiva en:
 
 El código incluye documentación JSDoc completa:
 
-\`\`\`typescript
+```typescript
 /**
  * Envía una respuesta exitosa estandarizada
  * @param {Response} res - Objeto de respuesta de Express
@@ -328,7 +325,7 @@ El código incluye documentación JSDoc completa:
  * @param {string} message - Mensaje de éxito
  * @returns {Response} Respuesta de Express
  */
-\`\`\`
+```
 
 ## 🛡️ Seguridad
 
@@ -354,17 +351,17 @@ El código incluye documentación JSDoc completa:
 
 ### Preparación
 
-\`\`\`bash
+```bash
 # Compilar TypeScript
 npm run build
 
 # Verificar build
 npm start
-\`\`\`
+```
 
 ### Con Docker
 
-\`\`\`bash
+```bash
 # Build imagen de producción
 docker build -t car-inventory-api:latest .
 
@@ -374,7 +371,7 @@ docker run -d \\
   --env-file .env.docker \\
   --name car-inventory-api \\
   car-inventory-api:latest
-\`\`\`
+```
 
 ### Plataformas Recomendadas
 
@@ -400,7 +397,7 @@ Este proyecto está bajo la Licencia ISC.
 
 Tu Nombre - [@tuhandle](https://twitter.com/tuhandle)
 
-## � Agradecimientos
+## 🙏 Agradecimientos
 
 - Express.js team
 - TypeScript team
