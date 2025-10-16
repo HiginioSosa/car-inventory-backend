@@ -29,7 +29,7 @@ export const createCarValidations = [
     .isLength({ max: 50 })
     .withMessage('El modelo no puede exceder 50 caracteres'),
 
-  body('año')
+  body('anio')
     .notEmpty()
     .withMessage('El año es requerido')
     .isInt({ min: 1900, max: new Date().getFullYear() + 1 })
@@ -99,7 +99,7 @@ export const updateCarValidations = [
     .isLength({ max: 50 })
     .withMessage('El modelo no puede exceder 50 caracteres'),
 
-  body('año')
+  body('anio')
     .optional()
     .isInt({ min: 1900, max: new Date().getFullYear() + 1 })
     .withMessage(`El año debe estar entre 1900 y ${new Date().getFullYear() + 1}`),
@@ -158,7 +158,7 @@ export const carFilterValidations = [
 
   query('modelo').optional().trim().isString().withMessage('El modelo debe ser un texto'),
 
-  query('año').optional().isInt({ min: 1900 }).withMessage('El año debe ser un número válido'),
+  query('anio').optional().isInt({ min: 1900 }).withMessage('El año debe ser un número válido'),
 
   query('minPrecio')
     .optional()
@@ -181,7 +181,7 @@ export const carFilterValidations = [
 
   query('sortBy')
     .optional()
-    .isIn(['precio', 'año', 'kilometraje', 'fechaAlta'])
+    .isIn(['precio', 'anio', 'kilometraje', 'fechaAlta'])
     .withMessage('Campo de ordenamiento no válido'),
 
   query('sortOrder')

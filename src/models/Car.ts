@@ -14,7 +14,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface ICar extends Document {
   marca: string;
   modelo: string;
-  año: number;
+  anio: number;
   precio: number;
   kilometraje: number;
   color?: string;
@@ -46,7 +46,7 @@ const carSchema = new Schema<ICar>(
       trim: true,
       index: true,
     },
-    año: {
+    anio: {
       type: Number,
       required: [true, 'El año es requerido'],
       min: [1900, 'El año debe ser mayor a 1900'],
@@ -147,7 +147,7 @@ carSchema.pre('findOneAndUpdate', function (next) {
  */
 carSchema.index({ marca: 1, modelo: 1 });
 carSchema.index({ precio: 1 });
-carSchema.index({ año: 1 });
+carSchema.index({ anio: 1 });
 carSchema.index({ isDeleted: 1, fechaAlta: -1 });
 
 export default mongoose.model<ICar>('Car', carSchema);

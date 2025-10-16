@@ -28,7 +28,7 @@ class CarController {
       const filters: CarFilters = {
         marca: req.query.marca as string,
         modelo: req.query.modelo as string,
-        año: req.query.año ? parseInt(req.query.año as string) : undefined,
+        anio: req.query.anio ? parseInt(req.query.anio as string) : undefined,
         minPrecio: req.query.minPrecio ? parseInt(req.query.minPrecio as string) : undefined,
         maxPrecio: req.query.maxPrecio ? parseInt(req.query.maxPrecio as string) : undefined,
         color: req.query.color as string,

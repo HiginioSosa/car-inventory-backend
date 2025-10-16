@@ -87,7 +87,7 @@ class CatalogController {
     try {
       const years = await catalogService.getYears();
 
-      return successResponse(res, 200, 'Años obtenidos exitosamente', { años: years });
+      return successResponse(res, 200, 'Años obtenidos exitosamente', { anios: years });
     } catch {
       return errorResponse(
         res,

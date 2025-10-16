@@ -69,7 +69,7 @@ export interface AuthResponse {
 export interface CreateCarDTO {
   marca: string;
   modelo: string;
-  año: number;
+  anio: number;
   precio: number;
   kilometraje: number;
   color?: string;
@@ -91,7 +91,7 @@ export type UpdateCarDTO = Partial<CreateCarDTO>;
 export interface CarFilters {
   marca?: string;
   modelo?: string;
-  año?: number;
+  anio?: number;
   minPrecio?: number;
   maxPrecio?: number;
   color?: string;
@@ -121,7 +121,7 @@ export interface PaginatedResponse<T> {
  * @interface YearCatalog
  */
 export interface YearCatalog {
-  años: number[];
+  anios: number[];
 }
 
 /**
@@ -143,7 +143,7 @@ export interface CarResponse {
   _id: string;
   marca: string;
   modelo: string;
-  año: number;
+  anio: number;
   precio: number;
   kilometraje: number;
   color?: string;
@@ -179,7 +179,7 @@ export interface MongoQuery {
   isDeleted: boolean;
   marca?: { $regex: string | RegExp; $options: string };
   modelo?: { $regex: string | RegExp; $options: string };
-  año?: number;
+  anio?: number;
   precio?: {
     $gte?: number;
     $lte?: number;

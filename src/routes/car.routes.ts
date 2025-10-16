@@ -37,7 +37,7 @@ const router = Router();
  *         schema:
  *           type: string
  *       - in: query
- *         name: año
+ *         name: anio
  *         schema:
  *           type: integer
  *       - in: query
@@ -141,7 +141,7 @@ router.get('/:id', authenticate, validate(carIdValidation), carController.getCar
  *             required:
  *               - marca
  *               - modelo
- *               - año
+ *               - anio
  *               - precio
  *               - kilometraje
  *               - email
@@ -151,7 +151,7 @@ router.get('/:id', authenticate, validate(carIdValidation), carController.getCar
  *                 type: string
  *               modelo:
  *                 type: string
- *               año:
+ *               anio:
  *                 type: integer
  *               precio:
  *                 type: integer
@@ -206,7 +206,7 @@ router.post(
  *                 type: string
  *               modelo:
  *                 type: string
- *               año:
+ *               anio:
  *                 type: integer
  *               precio:
  *                 type: integer

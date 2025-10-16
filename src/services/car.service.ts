@@ -29,7 +29,7 @@ class CarService {
     const {
       marca,
       modelo,
-      año,
+      anio,
       minPrecio,
       maxPrecio,
       color,
@@ -50,8 +50,8 @@ class CarService {
       query.modelo = { $regex: modelo, $options: 'i' };
     }
 
-    if (año) {
-      query.año = año;
+    if (anio) {
+      query.anio = anio;
     }
 
     if (minPrecio !== undefined || maxPrecio !== undefined) {
