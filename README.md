@@ -380,4 +380,4 @@ Este proyecto es para una prueba tecnica.
 ## 👥 Autor
 
 José Higinio Sosa Vázquez
-- GitHub: [higinio-sosa](https://github.com/higinio-sosa)
+- GitHub: [HiginioSosa](https://github.com/HiginioSosa)
