@@ -62,15 +62,31 @@ npm run dev
 ### Opción 2: Con Docker (Recomendado)
 
 ```bash
-# Solo MongoDB
-docker-compose up -d
+# Levantar MongoDB y Backend (con auto-seed)
+docker-compose up --build
 
-# Ver logs
-docker-compose logs -f
+# En segundo plano
+docker-compose up -d --build
 
-# Detener
+# Ver logs en tiempo real
+docker-compose logs -f backend
+
+# Detener servicios
 docker-compose down
+
+# Reiniciar desde cero (elimina datos)
+docker-compose down -v
+docker-compose up --build
 ```
+
+**Características Docker:**
+- ✅ MongoDB con credenciales configuradas
+- ✅ Backend con auto-compilación TypeScript
+- ✅ Ejecuta automáticamente `npm run seed` para inicializar datos
+- ✅ Volumen persistente para uploads
+- ✅ Credenciales por defecto:
+  - **Admin**: admin@carinventory.com / Admin123
+  - **MongoDB**: admin / admin123
 
 ## 📝 Scripts Disponibles
 
@@ -242,43 +258,119 @@ LOG_LEVEL=debug
 
 ## 🐳 Docker
 
-### MongoDB con Mongo Express
+### Inicio Rápido con Docker
 
 ```bash
-# Iniciar MongoDB y Mongo Express
-docker-compose up -d
+# Levantar todo el sistema (MongoDB + Backend + Auto-seed)
+docker-compose up --build
 
-# Acceder a Mongo Express
-# URL: http://localhost:8081
-# Usuario: admin
-# Password: admin123
+# En segundo plano
+docker-compose up -d --build
+
+# Ver logs en tiempo real
+docker-compose logs -f backend
+
+# Ver logs de MongoDB
+docker-compose logs -f mongodb
+
+# Detener servicios
+docker-compose down
+
+# Reiniciar desde cero (elimina datos y volúmenes)
+docker-compose down -v
+docker-compose up --build
 ```
 
-### Aplicación Completa con Docker
+### ✨ Características Docker
+
+- 🐘 **MongoDB 7.0**: Base de datos configurada con autenticación
+- 🚀 **Backend**: Compilación automática de TypeScript
+- 🌱 **Auto-seed**: Inicializa datos automáticamente al iniciar
+- 💾 **Volúmenes persistentes**: Los uploads se guardan en tu sistema local
+- 🔒 **Credenciales configuradas**: Listo para usar sin configuración adicional
+
+### 🔑 Credenciales por Defecto
+
+**Usuario Administrador (creado con seed):**
+- Email: `admin@carinventory.com`
+- Password: `Admin123`
+
+**MongoDB:**
+- Usuario: `admin`
+- Password: `admin123`
+- URI: `mongodb://admin:admin123@localhost:27017/car-inventory?authSource=admin`
+
+### 📍 URLs de Acceso
+
+Una vez levantados los servicios:
+
+- **API REST**: http://localhost:3000
+- **Swagger Docs**: http://localhost:3000/api-docs
+- **Health Check**: http://localhost:3000/health
+- **MongoDB**: mongodb://localhost:27017
+
+### 🛠️ Comandos Útiles Docker
 
 ```bash
-# Desarrollo (con hot-reload)
-docker-compose -f docker-compose.dev.yml up -d
+# Ver estado de los contenedores
+docker-compose ps
 
-# Producción (build optimizado)
-docker build -t car-inventory-api .
-docker run -p 3000:3000 --env-file .env.docker car-inventory-api
-```
+# Ejecutar comandos dentro del contenedor
+docker-compose exec backend sh
 
-### Comandos Útiles Docker
+# Reiniciar solo un servicio
+docker-compose restart backend
 
-```bash
-# Ver logs
-docker-compose logs -f app
-
-# Ejecutar comandos en el contenedor
-docker-compose exec app npm test
-
-# Reconstruir imágenes
+# Reconstruir imágenes sin caché
 docker-compose build --no-cache
 
-# Limpiar volúmenes
+# Ver todos los logs
+docker-compose logs
+
+# Seguir logs de un servicio específico
+docker-compose logs -f backend
+
+# Limpiar todo (contenedores, volúmenes, imágenes)
 docker-compose down -v
+docker system prune -a
+```
+
+### 🔄 Reiniciar Base de Datos
+
+```bash
+# Detener y eliminar volúmenes (borra todos los datos)
+docker-compose down -v
+
+# Levantar nuevamente (ejecutará seed automáticamente)
+docker-compose up --build
+```
+
+### 🐛 Troubleshooting Docker
+
+**Error de conexión a MongoDB:**
+```bash
+# Verificar que MongoDB esté corriendo
+docker-compose ps
+
+# Ver logs de MongoDB
+docker-compose logs mongodb
+
+# Esperar 5-10 segundos después de iniciar MongoDB
+```
+
+**Puerto ya en uso:**
+```bash
+# Verificar qué está usando el puerto 3000 o 27017
+netstat -ano | findstr :3000
+netstat -ano | findstr :27017
+
+# Cambiar puertos en docker-compose.yml si es necesario
+```
+
+**Reconstruir después de cambios:**
+```bash
+# Si modificas el código fuente, reconstruye la imagen
+docker-compose up --build
 ```
 
 ## 🧪 Testing

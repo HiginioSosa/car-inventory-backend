@@ -2,17 +2,23 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Copiar package files
+# Copiar archivos de dependencias
 COPY package*.json ./
 
-# Instalar dependencias
-RUN npm install
+# Instalar dependencias (necesitamos ts-node para el seed)
+RUN npm ci
 
-# Copiar código
-COPY . .
+# Copiar archivos de configuración
+COPY tsconfig.json ./
+
+# Copiar código fuente
+COPY src ./src
+
+# Compilar TypeScript
+RUN npm run build
 
 # Exponer puerto
 EXPOSE 3000
 
-# Comando por defecto
-CMD ["npm", "run", "dev"]
+# Iniciar aplicación
+CMD ["npm", "start"]
