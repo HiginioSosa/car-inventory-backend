@@ -36,13 +36,13 @@ router.get('/brands', catalogController.getAllBrands);
 
 /**
  * @swagger
- * /api/catalogs/models/{brand}:
+ * /api/catalogs/models/{marca}:
  *   get:
  *     summary: Obtener modelos por marca
  *     tags: [Catalogs]
  *     parameters:
  *       - in: path
- *         name: brand
+ *         name: marca
  *         required: true
  *         schema:
  *           type: string
@@ -53,7 +53,7 @@ router.get('/brands', catalogController.getAllBrands);
  *       404:
  *         description: Marca no encontrada
  */
-router.get('/models/:brand', catalogController.getModelsByBrand);
+router.get('/models/:marca', catalogController.getModelsByBrand);
 
 /**
  * @swagger

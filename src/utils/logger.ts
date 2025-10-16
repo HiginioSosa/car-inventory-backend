@@ -32,8 +32,6 @@ export const logger = {
    * Registra un mensaje informativo
    * @param {string} message - Mensaje a registrar
    * @param {...unknown} args - Argumentos adicionales
-   * @example
-   * logger.info('Server started', { port: 3000 });
    */
   info: (message: string, ...args: unknown[]) => {
     console.log(`ℹ️  [INFO] ${message}`, ...args);
@@ -42,8 +40,6 @@ export const logger = {
    * Registra un mensaje de error
    * @param {string} message - Mensaje de error
    * @param {...unknown} args - Argumentos adicionales
-   * @example
-   * logger.error('Database connection failed', error);
    */
   error: (message: string, ...args: unknown[]) => {
     console.error(`❌ [ERROR] ${message}`, ...args);
@@ -52,8 +48,6 @@ export const logger = {
    * Registra una advertencia
    * @param {string} message - Mensaje de advertencia
    * @param {...unknown} args - Argumentos adicionales
-   * @example
-   * logger.warn('Deprecated endpoint used');
    */
   warn: (message: string, ...args: unknown[]) => {
     console.warn(`⚠️  [WARN] ${message}`, ...args);
@@ -62,8 +56,6 @@ export const logger = {
    * Registra un mensaje de éxito
    * @param {string} message - Mensaje de éxito
    * @param {...unknown} args - Argumentos adicionales
-   * @example
-   * logger.success('Server is ready');
    */
   success: (message: string, ...args: unknown[]) => {
     console.log(`✅ [SUCCESS] ${message}`, ...args);
@@ -72,8 +64,6 @@ export const logger = {
    * Registra un mensaje de depuración (solo en desarrollo)
    * @param {string} message - Mensaje de depuración
    * @param {...unknown} args - Argumentos adicionales
-   * @example
-   * logger.debug('Processing request', { userId: 123 });
    */
   debug: (message: string, ...args: unknown[]) => {
     if (config.NODE_ENV === 'development') {

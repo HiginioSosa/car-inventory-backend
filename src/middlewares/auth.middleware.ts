@@ -16,8 +16,6 @@ import { errorResponse } from '../utils/responseHandler';
  * @param {Response} res - Response de Express
  * @param {NextFunction} next - Función next
  * @returns {void}
- * @example
- * router.get('/protected', authenticate, controller);
  */
 export const authenticate = async (
   req: AuthRequest,
@@ -71,8 +69,6 @@ export const authenticate = async (
  * Middleware para verificar rol de usuario
  * @param {UserRole[]} roles - Roles permitidos
  * @returns {Function} Middleware function
- * @example
- * router.delete('/cars/:id', authenticate, authorize(['admin']), controller);
  */
 export const authorize = (roles: UserRole[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {

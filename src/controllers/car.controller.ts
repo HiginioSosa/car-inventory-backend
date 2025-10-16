@@ -7,8 +7,9 @@
 import { Request, Response } from 'express';
 import carService from '../services/car.service';
 import { successResponse, errorResponse } from '../utils/responseHandler';
-import { CreateCarDTO, UpdateCarDTO, CarFilters, AuthRequest } from '../types';
+import { CreateCarDTO, UpdateCarDTO, CarFilters, AuthRequest, CarResponse } from '../types';
 import { getFileUrl } from '../middlewares/upload.middleware';
+import { ICar } from '../models/Car';
 
 /**
  * Controlador de Autos
@@ -21,8 +22,6 @@ class CarController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con lista de autos
-   * @example
-   * GET /api/cars?marca=Ford&page=1&limit=10
    */
   async getAllCars(req: Request, res: Response): Promise<Response> {
     try {
@@ -41,12 +40,19 @@ class CarController {
 
       const result = await carService.getAllCars(filters);
 
-      // Agregar URL completa a las fotos
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const carsWithUrls = result.data.map((car: any) => ({
-        ...car,
-        foto: car.foto ? getFileUrl(car.foto, req) : null,
-      }));
+      // Agregar URL completa a las fotos y convertir fechas a ISO
+      const carsWithUrls = result.data.map((car: ICar) => {
+        const carObj = car as unknown as Record<string, unknown>;
+        return {
+          ...carObj,
+          foto: carObj.foto ? getFileUrl(carObj.foto as string, req) : null,
+          fechaAlta: (carObj.fechaAlta as Date).toISOString(),
+          fechaModificacion: (carObj.fechaModificacion as Date).toISOString(),
+          fechaEliminacion: carObj.fechaEliminacion
+            ? (carObj.fechaEliminacion as Date).toISOString()
+            : null,
+        } as CarResponse;
+      });
 
       return successResponse(res, 200, 'Autos obtenidos exitosamente', {
         ...result,
@@ -73,8 +79,6 @@ class CarController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con auto encontrado
-   * @example
-   * GET /api/cars/507f1f77bcf86cd799439011
    */
   async getCarById(req: Request, res: Response): Promise<Response> {
     try {
@@ -114,9 +118,6 @@ class CarController {
    * @param {AuthRequest} req - Request con usuario autenticado
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con auto creado
-   * @example
-   * POST /api/cars
-   * Body: { "marca": "Ford", "modelo": "Focus", "año": 2020, ... }
    */
   async createCar(req: AuthRequest, res: Response): Promise<Response> {
     try {
@@ -161,9 +162,6 @@ class CarController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con auto actualizado
-   * @example
-   * PUT /api/cars/507f1f77bcf86cd799439011
-   * Body: { "precio": 300000 }
    */
   async updateCar(req: Request, res: Response): Promise<Response> {
     try {
@@ -209,8 +207,6 @@ class CarController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con confirmación
-   * @example
-   * DELETE /api/cars/507f1f77bcf86cd799439011
    */
   async deleteCar(req: Request, res: Response): Promise<Response> {
     try {
@@ -247,8 +243,6 @@ class CarController {
    * @param {Request} _req - Request de Express (no utilizado)
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con estadísticas
-   * @example
-   * GET /api/cars/stats
    */
   async getStats(_req: Request, res: Response): Promise<Response> {
     try {
@@ -272,8 +266,6 @@ class CarController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con autos encontrados
-   * @example
-   * GET /api/cars/search?q=Honda%20Civic
    */
   async searchCars(req: Request, res: Response): Promise<Response> {
     try {
@@ -291,12 +283,19 @@ class CarController {
 
       const cars = await carService.searchCars(searchTerm);
 
-      // Agregar URL completa a las fotos
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const carsWithUrls = cars.map((car: any) => ({
-        ...car,
-        foto: car.foto ? getFileUrl(car.foto, req) : null,
-      }));
+      // Agregar URL completa a las fotos y convertir fechas a ISO
+      const carsWithUrls = cars.map((car: ICar) => {
+        const carObj = car as unknown as Record<string, unknown>;
+        return {
+          ...carObj,
+          foto: carObj.foto ? getFileUrl(carObj.foto as string, req) : null,
+          fechaAlta: (carObj.fechaAlta as Date).toISOString(),
+          fechaModificacion: (carObj.fechaModificacion as Date).toISOString(),
+          fechaEliminacion: carObj.fechaEliminacion
+            ? (carObj.fechaEliminacion as Date).toISOString()
+            : null,
+        } as CarResponse;
+      });
 
       return successResponse(res, 200, 'Búsqueda completada exitosamente', carsWithUrls);
     } catch {

@@ -19,8 +19,6 @@ class AuthService {
    * @param {RegisterDTO} data - Datos del usuario
    * @returns {Promise<AuthResponse>} Usuario creado y token
    * @throws {Error} Si el email ya está registrado
-   * @example
-   * const result = await authService.register({ email, password, name });
    */
   async register(data: RegisterDTO): Promise<AuthResponse> {
     const { email, password, name } = data;
@@ -60,8 +58,6 @@ class AuthService {
    * @param {LoginDTO} data - Credenciales del usuario
    * @returns {Promise<AuthResponse>} Usuario y token
    * @throws {Error} Si las credenciales son inválidas
-   * @example
-   * const result = await authService.login({ email, password });
    */
   async login(data: LoginDTO): Promise<AuthResponse> {
     const { email, password } = data;
@@ -102,8 +98,6 @@ class AuthService {
    * @param {string} token - Token JWT
    * @returns {JWTPayload} Payload del token
    * @throws {Error} Si el token es inválido
-   * @example
-   * const payload = authService.verifyToken(token);
    */
   verifyToken(token: string): JWTPayload {
     try {
@@ -118,8 +112,6 @@ class AuthService {
    * @private
    * @param {IUser} user - Usuario
    * @returns {string} Token JWT
-   * @example
-   * const token = this.generateToken(user);
    */
   private generateToken(user: IUser): string {
     const payload: JWTPayload = {
@@ -137,8 +129,6 @@ class AuthService {
    * Obtener usuario por ID
    * @param {string} userId - ID del usuario
    * @returns {Promise<IUser | null>} Usuario encontrado
-   * @example
-   * const user = await authService.getUserById(userId);
    */
   async getUserById(userId: string): Promise<IUser | null> {
     return User.findById(userId).select('-password');
@@ -149,8 +139,6 @@ class AuthService {
    * @param {string} userId - ID del usuario
    * @param {Partial<IUser>} data - Datos a actualizar
    * @returns {Promise<IUser | null>} Usuario actualizado
-   * @example
-   * const updatedUser = await authService.updateUser(userId, { name: 'Nuevo nombre' });
    */
   async updateUser(userId: string, data: Partial<IUser>): Promise<IUser | null> {
     return User.findByIdAndUpdate(userId, data, { new: true }).select('-password');

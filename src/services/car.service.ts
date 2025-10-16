@@ -5,7 +5,14 @@
  */
 
 import Car, { ICar } from '../models/Car';
-import { CreateCarDTO, UpdateCarDTO, CarFilters, PaginatedResponse } from '../types';
+import {
+  CreateCarDTO,
+  UpdateCarDTO,
+  CarFilters,
+  PaginatedResponse,
+  MongoQuery,
+  SortOptions,
+} from '../types';
 import { deleteFile } from '../middlewares/upload.middleware';
 
 /**
@@ -17,8 +24,6 @@ class CarService {
    * Obtener todos los autos con filtros y paginación
    * @param {CarFilters} filters - Filtros de búsqueda
    * @returns {Promise<PaginatedResponse<ICar>>} Autos paginados
-   * @example
-   * const result = await carService.getAllCars({ marca: 'Ford', page: 1 });
    */
   async getAllCars(filters: CarFilters): Promise<PaginatedResponse<ICar>> {
     const {
@@ -35,8 +40,7 @@ class CarService {
     } = filters;
 
     // Construir query
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = { isDeleted: false };
+    const query: MongoQuery = { isDeleted: false };
 
     if (marca) {
       query.marca = { $regex: marca, $options: 'i' };
@@ -68,9 +72,9 @@ class CarService {
     const skip = (page - 1) * limit;
 
     // Construir sort
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const sort: any = {};
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    const sort: SortOptions = {
+      [sortBy]: sortOrder === 'asc' ? 1 : -1,
+    };
 
     // Ejecutar query con paginación
     const [cars, total] = await Promise.all([
@@ -79,8 +83,7 @@ class CarService {
     ]);
 
     return {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: cars as any[],
+      data: cars as unknown as ICar[],
       pagination: {
         page,
         limit,
@@ -95,8 +98,6 @@ class CarService {
    * @param {string} id - ID del auto
    * @returns {Promise<ICar | null>} Auto encontrado
    * @throws {Error} Si el auto no existe o está eliminado
-   * @example
-   * const car = await carService.getCarById('123abc');
    */
   async getCarById(id: string): Promise<ICar | null> {
     const car = await Car.findOne({ _id: id, isDeleted: false });
@@ -113,23 +114,16 @@ class CarService {
    * @param {CreateCarDTO} data - Datos del auto
    * @param {string} userId - ID del usuario que crea el auto
    * @returns {Promise<ICar>} Auto creado
-   * @example
-   * const car = await carService.createCar(carData, userId);
    */
   async createCar(data: CreateCarDTO, userId?: string): Promise<ICar> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const carData: any = {
+    const car = new Car({
       ...data,
       fechaAlta: new Date(),
       fechaModificacion: new Date(),
       isDeleted: false,
-    };
+      ...(userId && { createdBy: userId }),
+    });
 
-    if (userId) {
-      carData.createdBy = userId;
-    }
-
-    const car = new Car(carData);
     await car.save();
 
     return car;
@@ -141,8 +135,6 @@ class CarService {
    * @param {UpdateCarDTO} data - Datos a actualizar
    * @returns {Promise<ICar | null>} Auto actualizado
    * @throws {Error} Si el auto no existe o está eliminado
-   * @example
-   * const car = await carService.updateCar('123abc', { precio: 300000 });
    */
   async updateCar(id: string, data: UpdateCarDTO): Promise<ICar | null> {
     const car = await Car.findOne({ _id: id, isDeleted: false });
@@ -174,8 +166,6 @@ class CarService {
    * @param {string} id - ID del auto
    * @returns {Promise<ICar | null>} Auto eliminado
    * @throws {Error} Si el auto no existe o ya está eliminado
-   * @example
-   * const car = await carService.deleteCar('123abc');
    */
   async deleteCar(id: string): Promise<ICar | null> {
     const car = await Car.findOne({ _id: id, isDeleted: false });
@@ -199,8 +189,6 @@ class CarService {
    * @param {string} id - ID del auto
    * @returns {Promise<void>}
    * @throws {Error} Si el auto no existe
-   * @example
-   * await carService.hardDeleteCar('123abc');
    */
   async hardDeleteCar(id: string): Promise<void> {
     const car = await Car.findById(id);
@@ -224,8 +212,6 @@ class CarService {
   /**
    * Obtener estadísticas de autos
    * @returns {Promise<object>} Estadísticas
-   * @example
-   * const stats = await carService.getStats();
    */
   async getStats(): Promise<{
     total: number;
@@ -261,21 +247,20 @@ class CarService {
   /**
    * Buscar autos por texto
    * @param {string} searchTerm - Término de búsqueda
-   * @returns {Promise<any[]>} Autos encontrados
-   * @example
-   * const cars = await carService.searchCars('Honda Civic');
+   * @returns {Promise<ICar[]>} Autos encontrados
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async searchCars(searchTerm: string): Promise<any[]> {
+  async searchCars(searchTerm: string): Promise<ICar[]> {
     const regex = new RegExp(searchTerm, 'i');
 
-    return Car.find({
+    const results = await Car.find({
       isDeleted: false,
       $or: [{ marca: regex }, { modelo: regex }, { color: regex }],
     })
       .sort({ fechaAlta: -1 })
       .limit(20)
       .lean();
+
+    return results as unknown as ICar[];
   }
 }
 

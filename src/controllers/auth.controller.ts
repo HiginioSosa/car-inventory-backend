@@ -20,9 +20,6 @@ class AuthController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con usuario y token
-   * @example
-   * POST /api/auth/register
-   * Body: { "email": "user@example.com", "password": "Pass123", "name": "John Doe" }
    */
   async register(req: Request, res: Response): Promise<Response> {
     try {
@@ -55,9 +52,6 @@ class AuthController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con usuario y token
-   * @example
-   * POST /api/auth/login
-   * Body: { "email": "user@example.com", "password": "Pass123" }
    */
   async login(req: Request, res: Response): Promise<Response> {
     try {
@@ -90,9 +84,6 @@ class AuthController {
    * @param {AuthRequest} req - Request con usuario autenticado
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con perfil del usuario
-   * @example
-   * GET /api/auth/profile
-   * Headers: { "Authorization": "Bearer <token>" }
    */
   async getProfile(req: AuthRequest, res: Response): Promise<Response> {
     try {
@@ -129,9 +120,6 @@ class AuthController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con validación del token
-   * @example
-   * POST /api/auth/verify
-   * Body: { "token": "<jwt_token>" }
    */
   async verifyToken(req: Request, res: Response): Promise<Response> {
     try {

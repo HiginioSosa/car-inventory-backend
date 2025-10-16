@@ -15,6 +15,7 @@ import {
   carIdValidation,
   carFilterValidations,
 } from '../validators/car.validators';
+import { createLimiter, uploadLimiter } from '../middlewares/rateLimiter.middleware';
 
 const router = Router();
 
@@ -173,6 +174,8 @@ router.get('/:id', authenticate, validate(carIdValidation), carController.getCar
 router.post(
   '/',
   authenticate,
+  createLimiter,
+  uploadLimiter,
   uploadSingle,
   validate(createCarValidations),
   carController.createCar
@@ -227,6 +230,7 @@ router.post(
 router.put(
   '/:id',
   authenticate,
+  uploadLimiter,
   uploadSingle,
   validate(updateCarValidations),
   carController.updateCar

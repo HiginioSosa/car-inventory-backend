@@ -12,8 +12,6 @@ import { errorResponse } from '../utils/responseHandler';
  * Middleware para validar requests
  * @param {ValidationChain[]} validations - Array de validaciones de express-validator
  * @returns {Function} Middleware de validación
- * @example
- * router.post('/', validate(createCarValidations), controller.create);
  */
 export const validate = (validations: ValidationChain[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {

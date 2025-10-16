@@ -28,8 +28,13 @@ const storage = multer.diskStorage({
   },
   filename: (_req: Request, file: Express.Multer.File, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const ext = path.extname(file.originalname);
-    const name = path.basename(file.originalname, ext).replace(/\s+/g, '-');
+    const ext = path.extname(file.originalname).toLowerCase();
+    // Sanitizar nombre del archivo: eliminar caracteres especiales y espacios
+    const name = path
+      .basename(file.originalname, ext)
+      .replace(/[^a-zA-Z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .substring(0, 50); // Limitar longitud
     cb(null, `${name}-${uniqueSuffix}${ext}`);
   },
 });
@@ -45,11 +50,14 @@ const fileFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCall
   // Tipos MIME permitidos
   const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
-  if (allowedMimeTypes.includes(file.mimetype)) {
+  // Extensiones permitidas
+  const ext = path.extname(file.originalname).toLowerCase();
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+
+  if (allowedMimeTypes.includes(file.mimetype) && allowedExtensions.includes(ext)) {
     cb(null, true);
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    cb(new Error('Tipo de archivo no válido. Solo se permiten imágenes (JPEG, PNG, WebP)') as any);
+    cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE', 'foto'));
   }
 };
 
@@ -68,8 +76,6 @@ const upload = multer({
 /**
  * Middleware para subir una sola imagen
  * @type {multer.RequestHandler}
- * @example
- * router.post('/cars', uploadSingle, createCar);
  */
 export const uploadSingle = upload.single('foto');
 
@@ -77,8 +83,6 @@ export const uploadSingle = upload.single('foto');
  * Middleware para subir múltiples imágenes
  * @param {number} maxCount - Número máximo de archivos
  * @returns {multer.RequestHandler}
- * @example
- * router.post('/gallery', uploadMultiple(5), createGallery);
  */
 export const uploadMultiple = (maxCount: number = 5) => {
   return upload.array('fotos', maxCount);
@@ -88,12 +92,19 @@ export const uploadMultiple = (maxCount: number = 5) => {
  * Función para eliminar archivo
  * @param {string} filePath - Ruta del archivo a eliminar
  * @returns {Promise<void>}
- * @example
- * await deleteFile(car.foto);
  */
 export const deleteFile = async (filePath: string): Promise<void> => {
   try {
-    const fullPath = path.join(uploadsDir, path.basename(filePath));
+    // Prevenir path traversal: solo usar el basename
+    const safeFilename = path.basename(filePath);
+    const fullPath = path.join(uploadsDir, safeFilename);
+
+    // Verificar que el path resultante esté dentro del directorio de uploads
+    const normalizedPath = path.normalize(fullPath);
+    if (!normalizedPath.startsWith(uploadsDir)) {
+      throw new Error('Invalid file path');
+    }
+
     if (fs.existsSync(fullPath)) {
       fs.unlinkSync(fullPath);
     }
@@ -108,9 +119,11 @@ export const deleteFile = async (filePath: string): Promise<void> => {
  * @param {string} filename - Nombre del archivo
  * @param {Request} req - Request de Express
  * @returns {string} URL completa del archivo
- * @example
- * const photoUrl = getFileUrl(filename, req);
  */
 export const getFileUrl = (filename: string, req: Request): string => {
-  return `${req.protocol}://${req.get('host')}/uploads/${filename}`;
+  // Sanitizar filename para prevenir path traversal
+  const safeFilename = path.basename(filename);
+  return `${req.protocol}://${req.get('host')}/uploads/${safeFilename}`;
 };
+
+export { upload };

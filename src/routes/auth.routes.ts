@@ -9,6 +9,7 @@ import authController from '../controllers/auth.controller';
 import { validate } from '../middlewares/validation.middleware';
 import { registerValidations, loginValidations } from '../validators/auth.validators';
 import { authenticate } from '../middlewares/auth.middleware';
+import { authLimiter } from '../middlewares/rateLimiter.middleware';
 
 const router = Router();
 
@@ -45,7 +46,7 @@ const router = Router();
  *       409:
  *         description: Email ya registrado
  */
-router.post('/register', validate(registerValidations), authController.register);
+router.post('/register', authLimiter, validate(registerValidations), authController.register);
 
 /**
  * @swagger
@@ -74,7 +75,7 @@ router.post('/register', validate(registerValidations), authController.register)
  *       401:
  *         description: Credenciales inválidas
  */
-router.post('/login', validate(loginValidations), authController.login);
+router.post('/login', authLimiter, validate(loginValidations), authController.login);
 
 /**
  * @swagger

@@ -14,8 +14,6 @@ class CatalogService {
   /**
    * Obtener todas las marcas activas
    * @returns {Promise<string[]>} Array de marcas
-   * @example
-   * const brands = await catalogService.getAllBrands();
    */
   async getAllBrands(): Promise<string[]> {
     const catalogs = await Catalog.find({ isActive: true })
@@ -31,8 +29,6 @@ class CatalogService {
    * @param {string} marca - Nombre de la marca
    * @returns {Promise<string[]>} Array de modelos
    * @throws {Error} Si la marca no existe
-   * @example
-   * const models = await catalogService.getModelsByBrand('Ford');
    */
   async getModelsByBrand(marca: string): Promise<string[]> {
     const catalog = await Catalog.findOne({
@@ -53,8 +49,6 @@ class CatalogService {
   /**
    * Obtener catálogo completo de años
    * @returns {Promise<number[]>} Array de años
-   * @example
-   * const years = await catalogService.getYears();
    */
   async getYears(): Promise<number[]> {
     const currentYear = new Date().getFullYear();
@@ -70,13 +64,15 @@ class CatalogService {
 
   /**
    * Obtener todo el catálogo (marcas con modelos)
-   * @returns {Promise<any[]>} Array de catálogos
-   * @example
-   * const catalogs = await catalogService.getFullCatalog();
+   * @returns {Promise<ICatalog[]>} Array de catálogos
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async getFullCatalog(): Promise<any[]> {
-    return Catalog.find({ isActive: true }).select('marca modelos').sort({ marca: 1 }).lean();
+  async getFullCatalog(): Promise<ICatalog[]> {
+    const results = await Catalog.find({ isActive: true })
+      .select('marca modelos')
+      .sort({ marca: 1 })
+      .lean();
+
+    return results as unknown as ICatalog[];
   }
 
   /**
@@ -84,8 +80,6 @@ class CatalogService {
    * @param {string} marca - Nombre de la marca
    * @param {string[]} modelos - Array de modelos
    * @returns {Promise<ICatalog>} Catálogo creado/actualizado
-   * @example
-   * const catalog = await catalogService.upsertCatalog('Honda', ['Civic', 'Accord']);
    */
   async upsertCatalog(marca: string, modelos: string[]): Promise<ICatalog> {
     const modelosArray = modelos.map((nombre) => ({
@@ -112,8 +106,6 @@ class CatalogService {
    * @param {string} modelo - Nombre del modelo
    * @returns {Promise<ICatalog | null>} Catálogo actualizado
    * @throws {Error} Si la marca no existe
-   * @example
-   * const catalog = await catalogService.addModel('Ford', 'Mustang');
    */
   async addModel(marca: string, modelo: string): Promise<ICatalog | null> {
     const catalog = await Catalog.findOne({
@@ -146,8 +138,6 @@ class CatalogService {
   /**
    * Inicializar catálogos con datos predeterminados
    * @returns {Promise<void>}
-   * @example
-   * await catalogService.initializeCatalogs();
    */
   async initializeCatalogs(): Promise<void> {
     const defaultCatalogs = [

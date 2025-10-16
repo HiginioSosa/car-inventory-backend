@@ -19,8 +19,6 @@ class CatalogController {
    * @param {Request} _req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con lista de marcas
-   * @example
-   * GET /api/catalogs/brands
    */
   async getAllBrands(_req: Request, res: Response): Promise<Response> {
     try {
@@ -48,8 +46,6 @@ class CatalogController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con lista de modelos
-   * @example
-   * GET /api/catalogs/models/Ford
    */
   async getModelsByBrand(req: Request, res: Response): Promise<Response> {
     try {
@@ -86,8 +82,6 @@ class CatalogController {
    * @param {Request} _req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con lista de años
-   * @example
-   * GET /api/catalogs/years
    */
   async getYears(_req: Request, res: Response): Promise<Response> {
     try {
@@ -111,8 +105,6 @@ class CatalogController {
    * @param {Request} _req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con catálogo completo
-   * @example
-   * GET /api/catalogs/full
    */
   async getFullCatalog(_req: Request, res: Response): Promise<Response> {
     try {
@@ -136,9 +128,6 @@ class CatalogController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con catálogo creado/actualizado
-   * @example
-   * POST /api/catalogs
-   * body: { marca: "Ford", modelos: ["Focus", "Fusion"] }
    */
   async upsertCatalog(req: Request, res: Response): Promise<Response> {
     try {
@@ -184,9 +173,6 @@ class CatalogController {
    * @param {Request} req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta con catálogo actualizado
-   * @example
-   * POST /api/catalogs/Ford/models
-   * body: { modelo: "Mustang" }
    */
   async addModel(req: Request, res: Response): Promise<Response> {
     try {
@@ -227,8 +213,6 @@ class CatalogController {
    * @param {Request} _req - Request de Express
    * @param {Response} res - Response de Express
    * @returns {Promise<Response>} Respuesta de confirmación
-   * @example
-   * POST /api/catalogs/initialize
    */
   async initializeCatalogs(_req: Request, res: Response): Promise<Response> {
     try {

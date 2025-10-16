@@ -36,8 +36,6 @@ interface ErrorResponse {
  * @param {string} message - Mensaje de éxito
  * @param {T} [data] - Datos a enviar en la respuesta
  * @returns {Response} Respuesta de Express
- * @example
- * successResponse(res, 200, 'Car retrieved successfully', { id: 1, name: 'Toyota' });
  */
 export const successResponse = <T = unknown>(
   res: Response,
@@ -61,8 +59,6 @@ export const successResponse = <T = unknown>(
  * @param {string} message - Mensaje de error en inglés
  * @param {string} customMessage - Mensaje de error en español
  * @returns {Response} Respuesta de Express
- * @example
- * errorResponse(res, 404, 'Not Found', 'Car not found', 'Carro no encontrado');
  */
 export const errorResponse = (
   res: Response,

@@ -135,3 +135,61 @@ export type UserRole = 'admin' | 'user';
  * @type {HttpStatusCode}
  */
 export type HttpStatusCode = 200 | 201 | 204 | 400 | 401 | 403 | 404 | 409 | 500;
+
+/**
+ * Interface para objeto de Car con datos serializados
+ */
+export interface CarResponse {
+  _id: string;
+  marca: string;
+  modelo: string;
+  año: number;
+  precio: number;
+  kilometraje: number;
+  color?: string;
+  email: string;
+  telefono: string;
+  foto: string | null;
+  fechaAlta: string;
+  fechaModificacion: string;
+  fechaEliminacion?: string | null;
+  isDeleted: boolean;
+  createdBy?: string;
+}
+
+/**
+ * Interface para catálogo completo de marcas y modelos
+ */
+export interface CatalogResponse {
+  _id: string;
+  marca: string;
+  modelos: Array<{
+    nombre: string;
+    isActive: boolean;
+  }>;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Type para query de MongoDB
+ */
+export interface MongoQuery {
+  isDeleted: boolean;
+  marca?: { $regex: string | RegExp; $options: string };
+  modelo?: { $regex: string | RegExp; $options: string };
+  año?: number;
+  precio?: {
+    $gte?: number;
+    $lte?: number;
+  };
+  color?: { $regex: string | RegExp; $options: string };
+}
+
+/**
+ * Type para opciones de ordenamiento de MongoDB
+ */
+export type SortOptions = {
+  [key: string]: 1 | -1;
+};
