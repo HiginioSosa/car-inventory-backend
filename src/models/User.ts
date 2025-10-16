@@ -94,7 +94,7 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
 /**
  * Índices para optimización
  */
-userSchema.index({ email: 1 });
+// email ya tiene índice único definido en el schema
 userSchema.index({ isActive: 1 });
 
 export default mongoose.model<IUser>('User', userSchema);

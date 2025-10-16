@@ -146,8 +146,7 @@ carSchema.pre('findOneAndUpdate', function (next) {
  * Índices compuestos para búsquedas optimizadas
  */
 carSchema.index({ marca: 1, modelo: 1 });
-carSchema.index({ precio: 1 });
-carSchema.index({ anio: 1 });
+// precio y anio ya tienen índices definidos en el schema
 carSchema.index({ isDeleted: 1, fechaAlta: -1 });
 
 export default mongoose.model<ICar>('Car', carSchema);
